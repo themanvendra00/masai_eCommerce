@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart Page</title>
+    <style>
+      /* Write all necessery css here  */
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+      body{
+        font-family: 'Poppins', sans-serif;
+      }
+      .nav{
+        display: flex;
+        width: 100%;
+        height: 60px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+      .nav a{
+        text-decoration: none;
+        color: black;
+        font-size: 20px;
+        font-weight: 900;
+      }
+      #total{
+        text-align: center;
+      }
+      #cart-container{
+        width: 90%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto;
+        gap: 40px;
+        
+      }
+      #cart-container>div>img{
+        width: 100%;
+      }
+      #cart-container>div{
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        padding: 40px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Masai E-Commerce</h1>
+      <a href="./index.html">Home</a>
+      <a href="./cart.html">Cart</a>
+    </div>
+    <h1 id="total">Your Total cart Price is:- <span id="cart-total">0</span></h1>
+    <div id="cart-container">
+      <!-- Here Append All the cart Products  -->
+    </div>
+  </body>
+  <script>
+    // Write all necessery JS here 
+
+    let count = 0;
+
+    let cartItems = JSON.parse(localStorage.getItem("cart"));
+    displayDetails(cartItems);
+
+    let totalcost = cartItems.reduce((acc,el) => acc + el.price, 0);
+    let totalprice = document.querySelector("#cart-total");
+    totalprice.innerText = totalcost;
+
+    function displayDetails(all_data){
+        document.querySelector("#cart-container").innerHTML="";
+        all_data.forEach(element => {
+            let div = document.createElement("div");
+
+            let product = document.createElement("img");
+            product.setAttribute("src",element.img);
+
+            let brand = document.createElement("h3");
+            brand.innerText = element.brand;
+
+            let price = document.createElement("p");
+            price.innerText = "₹"+element.price;
+
+            let details = document.createElement("p");
+            details.innerText = element.details;
+
+            let category = document.createElement("p");
+            category.innerText = "Category:- "+element.category;
+
+            let add_btn = document.createElement("button");
+            add_btn.innerText="+";
+            add_btn.addEventListener("click",function(){
+              add_text.innerText= +(add_text.innerText)+1;
+            })
+
+            let add_text = document.createElement("span");
+            add_text.innerText="1";
+
+            let sub_btn = document.createElement("button");
+            sub_btn.innerText="-";
+            sub_btn.addEventListener("click",function(){
+              add_text.innerText= +(add_text.innerText)-1;
+
+              if(add_text.innerText=="0"){
+                all_data.splice(index,1);
+              }
+            })
+
+            let rem_btn = document.createElement("button");
+            rem_btn.innerText="Remove";
+
+            div.append(product, brand, price, details, category,add_btn,add_text,sub_btn,rem_btn);
+
+            document.querySelector("#cart-container").append(div);
+        });
+    }
+  </script>
+</html>
